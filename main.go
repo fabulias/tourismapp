@@ -1,12 +1,12 @@
 package main
 
 import (
-	"log"
-	"github.com/gin-gonic/gin"
 	"database/sql"
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"os"
-	"fmt"
 
 	_ "github.com/lib/pq"
 )
@@ -21,10 +21,10 @@ func checkErr(err error, msg string) {
 }
 
 func connectDatabase() {
-	db, err = sql.Open("postgres", "postgres://eozcyemimcuhgg:3ac2YMMZ0EMofFw6rdrTXIky6W@ec2-107-22-250-212.compute-1.amazonaws.com:5432/da6rnltctu258a")//os.Getenv("DATABASE_URL"))
+	db, err = sql.Open("postgres", "postgres://eozcyemimcuhgg:3ac2YMMZ0EMofFw6rdrTXIky6W@ec2-107-22-250-212.compute-1.amazonaws.com:5432/da6rnltctu258a") //os.Getenv("DATABASE_URL"))
 	if err != nil {
-  	log.Fatalln("Error opening database: %q", err)
-  }
+		log.Fatalln("Error opening database: %q", err)
+	}
 }
 
 func disconnectDatabase() {
@@ -48,26 +48,29 @@ func Cors() gin.HandlerFunc {
 	}
 }
 
-func GetUsers(c *gin.Context)  {
+func GetUsers(c *gin.Context) {
 	connectDatabase()
 	pingDatabase()
+	var name string
+	errq := db.QueryRow("SELECT surname FROM customer WHERE name='nicolas'").Scan(&name)
 
-	_, errq := db.Query("SELECT * FROM customer")
+	fmt.Printf("Nombre", name)
+
 	if errq != nil {
 		log.Fatalln("Error in query ", errq)
 		disconnectDatabase()
-		c.JSON(http.StatusInternalServerError, gin.H {
-			"message":"There are no users",
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "There are no users",
 		})
 	}
 
 	//defer rows.Close()
 	disconnectDatabase()
-	c.JSON(http.StatusOK, gin.H{"Ping":"Pong"})
+	c.JSON(http.StatusOK, gin.H{"Ping": "Pong"})
 }
 
 func GetUser(c *gin.Context) {
-	c.JSON(200, gin.H{})
+
 }
 
 func main() {
