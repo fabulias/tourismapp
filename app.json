@@ -1,0 +1,12 @@
+{
+ "name":"tourismapp",
+ "description":"Search places, Share Places, Tourism and more",
+ "keywords":[
+  "tourism",
+  "golang"
+  "gin"
+  ]
+"repository":"http://github.com/heroku/tourismapp"
+
+
+}
