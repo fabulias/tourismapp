@@ -111,14 +111,18 @@ func GetUsers(c *gin.Context) {
 	connectDatabase()
 	pingDatabase()
 	//var []user = new(user)
-	rows, errq := db.Query("SELECT name FROM customer")
+	//User := user{Name: " ", Surname: " ", S_surname: " ", Rut: " ", Mail: " ", Password: " "}
+	User := new(user)
+	rows, errq := db.Query("SELECT * FROM customer")
 	defer rows.Close()
 	for rows.Next() {
-		var name string
-		if err := rows.Scan(&name); err != nil {
+		//var name string
+		err := rows.Scan(&User.Name, &User.Surname, &User.S_surname, &User.Rut, &User.Mail, &User.Password)
+		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("----> %s", name)
+		fmt.Printf("----> %s - %s", User.Name, User.Surname)
+		c.JSON(http.StatusOK, gin.H{"Name": User.Name, "Surname": User.Surname, "S_surname": User.S_surname, "Rut": User.Rut, "Mail": User.Mail, "Password": User.Password})
 	}
 
 	if errq != nil {
@@ -131,7 +135,6 @@ func GetUsers(c *gin.Context) {
 
 	//defer rows.Close()
 	disconnectDatabase()
-	c.JSON(http.StatusOK, gin.H{"Ping": "hola"})
 }
 
 func GetUser(c *gin.Context) {
