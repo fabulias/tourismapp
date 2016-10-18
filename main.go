@@ -5,6 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"database/sql"
 	"net/http"
+	"os"
+	"fmt"
 
 	_ "github.com/lib/pq"
 )
@@ -50,31 +52,28 @@ func GetUsers(c *gin.Context)  {
 	connectDatabase()
 	pingDatabase()
 
-	var tmp string
-	rows, errq := db.Query("SELECT * FROM customer")
+	_, errq := db.Query("SELECT * FROM customer")
 	if errq != nil {
 		log.Fatalln("Error in query ", errq)
-		c.JSON(http.StatusInternalServerError, gin.H {
-																								"message" : "There are no users"
-		 																					})
+		//disconnectDatabase()
+		//c.JSON(http.StatusInternalServerError, gin.H {
+		//	"message":"There are no users",
+		//})
 	}
-	defer rows.Close()
-	switch {
-		case err == sql.ErrNoRows:
-			return false
-		case err != nil:
-			return false
-		default:
-			return true
-	}
+
+	//defer rows.Close()
 	disconnectDatabase()
 	c.JSON(http.StatusOK, gin.H{"Ping":"Pong"})
+}
+
+func GetUser(c *gin.Context) {
+	c.JSON(200, gin.H{})
 }
 
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
-		log.Fatalln("$PORT must be set for next event")
+		fmt.Println("$PORT must be set for next event")
 		port = "8080"
 	}
 
@@ -82,9 +81,10 @@ func main() {
 
 	r.Use(Cors())
 
-	v1 := r.Group("v1") {
+	v1 := r.Group("v1")
+	{
 		v1.GET("/users", GetUsers)
-		//v1.GET("/users/:id", GetUser)
+		v1.GET("/users/:id", GetUser)
 	}
 
 	if errGin := r.Run(":" + port); errGin != nil {
