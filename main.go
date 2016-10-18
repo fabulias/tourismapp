@@ -55,10 +55,10 @@ func GetUsers(c *gin.Context)  {
 	_, errq := db.Query("SELECT * FROM customer")
 	if errq != nil {
 		log.Fatalln("Error in query ", errq)
-		//disconnectDatabase()
-		//c.JSON(http.StatusInternalServerError, gin.H {
-		//	"message":"There are no users",
-		//})
+		disconnectDatabase()
+		c.JSON(http.StatusInternalServerError, gin.H {
+			"message":"There are no users",
+		})
 	}
 
 	//defer rows.Close()
