@@ -381,9 +381,27 @@ func GetTag_place(c *gin.Context) {
 func TagsByPlace(c *gin.Context) {
 	connectDatabase()
 	pingDatabase()
-
 	id := c.Params.ByName("id")
+	Tags := new(tags)
+	rows, errq := db.Query("SELECT tags.* FROM tags_places, tags WHERE tags_places.id_place=$1 AND tags.id=tags_places.id_tag ", id)
+	defer rows.Close()
+	for rows.Next() {
+		err = rows.Scan(&Tags.Id, &Tags.Name)
+		fmt.Printf("---->ID: %d ---->NAME: %d", Tags.Id, Tags.Name)
+		if err != nil {
+			log.Fatal(err)
+		}
 
+		c.JSON(http.StatusOK, Tags)
+	}
+	if errq != nil {
+		log.Fatalln("Error in query ", errq)
+		disconnectDatabase()
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "There are no users",
+		})
+	}
+	disconnectDatabase()
 }
 
 func main() {
@@ -411,7 +429,7 @@ func main() {
 		v1.GET("/schedules/:id", GetSchedule)
 		v1.GET("/tags_places", GetTags_places)
 		v1.GET("/tags_places/:id", GetTag_place)
-
+		v1.GET("/tagsbyplaces/:id", TagsByPlace)
 	}
 
 	if errGin := r.Run(":" + port); errGin != nil {
