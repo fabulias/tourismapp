@@ -375,6 +375,17 @@ func GetTag_place(c *gin.Context) {
 	c.JSON(http.StatusOK, Tags_places) //retornando los datos de user
 	disconnectDatabase()
 }
+
+/* Función que entrega los nombres de los tag's que tiene un place*/
+
+func TagsByPlace(c *gin.Context) {
+	connectDatabase()
+	pingDatabase()
+
+	id := c.Params.ByName("id")
+
+}
+
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
