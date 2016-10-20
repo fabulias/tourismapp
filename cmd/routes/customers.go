@@ -4,11 +4,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
-	"database/sql"
+	"tourismapp/cmd/lib"
 
 	_ "github.com/lib/pq"
 )
 
+/**
+Clase que almacenara los datos obtenidos de cada usuario.
+*/
 type user struct {
 	Name      string `json:"name" binding:"required"`
 	Surname   string `json:"surname" binding:"required"`
@@ -18,20 +21,21 @@ type user struct {
 	Password  string `json:"password" binding:"required"`
 }
 
-/*
-	Método que busca todos los usuarios de la bdd.
+/**
+Método que busca todos los usuarios de la bdd.
 */
 func GetUsers(c *gin.Context) {
+	log.Println("Entro a users")
 	//Verificar conexión base de datos
-	connectDatabase()
+	lib.ConnectDatabase()
 	//Objeto a recibir cada fila de la consulta
 	User := new(user)
 	//Se vuelve a verificar conexión para realizar consulta
-	pingDatabase()
+	lib.PingDatabase()
 	//Consulta a base de datos
 	rows, errq := db.Query("SELECT * FROM customer")
 	//Desconectarse de la base de datos.
-	disconnectDatabase()
+	lib.DisconnectDatabase()
 	// Si la consulta no funciona se retorna error de servidor
 	if errq != nil {
 		log.Fatalln("Error in query ", errq)
@@ -43,7 +47,12 @@ func GetUsers(c *gin.Context) {
 	// Recorrer las filas retornadas
 	for rows.Next() {
 		// Se guarda valor en variable User
-		err := rows.Scan(&User.Name, &User.Surname, &User.S_surname, &User.Rut, &User.Mail, &User.Password)
+		err := rows.Scan(&User.Name,
+			&User.Surname,
+			&User.S_surname,
+			&User.Rut,
+			&User.Mail,
+			&User.Password)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -57,22 +66,26 @@ func GetUsers(c *gin.Context) {
 */
 func GetUser(c *gin.Context) {
 	//Verificar conexión base de datos
-	connectDatabase()
+	lib.ConnectDatabase()
 	//Se obtienen parametros de la URI
-	name := c.Params.ByName("name") //Obtiene el parametro enviado por url llamado name.
-	user := new(user)               // Creando object user
+	name := c.Params.ByName("name")
+	user := new(user)
 	//Se vuelve a verificar conexión para realizar consulta
-	pingDatabase()
-	errq := db.QueryRow("SELECT * FROM customer WHERE name=$1", name).Scan(&user.Name, &user.Surname, &user.S_surname, &user.Rut, &user.Mail, &user.Password)
-	//QueryRow devuelve sólo una fila de la DB, la cual se almacena en user
+	lib.PingDatabase()
+	errq := db.QueryRow("SELECT * FROM customer WHERE name=$1", name).Scan(
+		&user.Name,
+		&user.Surname,
+		&user.S_surname,
+		&user.Rut,
+		&user.Mail,
+		&user.Password)
+	lib.DisconnectDatabase()
 	if errq != nil {
 		log.Fatalln("Error in query ", errq)
-		disconnectDatabase()
+		//Se retorna error de servidor y un mensaje
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "There are no users",
 		})
 	}
-
-	c.JSON(http.StatusOK, user) //retornando los datos de user
-	disconnectDatabase()
+	c.JSON(http.StatusOK, user)
 }
