@@ -2,10 +2,7 @@ package model
 
 import (
 	"database/sql"
-	//"github.com/coopernurse/gorp"
-	//"gopkg.in/gorp.v1"
 	"log"
-	//"os"
 
 	_ "github.com/lib/pq"
 )
