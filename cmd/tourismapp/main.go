@@ -49,7 +49,7 @@ func main() {
 		v1.GET("/evaluations", routes.GetEvaluations)
 		v1.GET("/schedules/", routes.GetSchedules)
 		v1.GET("/tags_places", routes.GetTagsPlaces)
-		v1.GET("/geocoords", routes.GetGeocoords)
+		//v1.GET("/geocoords", routes.GetGeocoords)
 
 		/*
 			v1.GET("/places/:id", GetPlace)
