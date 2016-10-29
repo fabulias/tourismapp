@@ -8,7 +8,7 @@ import (
 	_ "github.com/lib/pq"
 	"log"
 	"os"
-	"tourismapp/cmd/tourismapp/routes"
+	"tourismapp/cmd/routes"
 )
 
 var DEFAULT_PORT string = "8080"

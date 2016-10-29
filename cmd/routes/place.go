@@ -3,25 +3,25 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"tourismapp/cmd/tourismapp/model"
+	"tourismapp/cmd/model"
 
 	_ "github.com/lib/pq"
 )
 
-//Método que busca todos los tags de la bdd.
-func GetTags(c *gin.Context) {
-	tags := model.QueryTags()
-	if len(tags) == 0 {
+//Método que busca todos los lugares de la bdd.
+func GetPlaces(c *gin.Context) {
+	places := model.QueryPlaces()
+	if len(places) == 0 {
 		response := gin.H{
 			"status":  "error",
 			"data":    nil,
-			"message": "There are no tags",
+			"message": "There are no places",
 		}
 		c.JSON(http.StatusNotFound, response)
 	} else {
 		response := gin.H{
 			"status":  "success",
-			"data":    tags,
+			"data":    places,
 			"message": nil,
 		}
 		c.JSON(http.StatusOK, response)

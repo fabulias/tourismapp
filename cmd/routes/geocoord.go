@@ -3,7 +3,7 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"tourismapp/cmd/tourismapp/model"
+	"tourismapp/cmd/model"
 
 	_ "github.com/lib/pq"
 )
