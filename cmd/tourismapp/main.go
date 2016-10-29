@@ -50,7 +50,7 @@ func main() {
 		v1.GET("/schedules/", routes.GetSchedules)
 		v1.GET("/tags_places", routes.GetTagsPlaces)
 		//v1.GET("/geocoords", routes.GetGeocoords)
-
+		//v1.POST("/users/:rut", routes.PostUser)
 		/*
 			v1.GET("/places/:id", GetPlace)
 			v1.GET("/tags/:id", GetTag)
