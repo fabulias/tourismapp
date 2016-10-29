@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
 	"log"
-	"net/http"
 	"os"
 	"time"
 	"tourismapp/cmd/tourismapp/routes"
