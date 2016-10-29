@@ -26,10 +26,6 @@ func Cors() gin.HandlerFunc {
 	}
 }
 
-func index(c *gin.Context) {
-	c.JSON(http.StatusBadRequest, gin.H{"message ": ":P, test other route... url.com/v1/users for example"})
-}
-
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -42,7 +38,6 @@ func main() {
 	r := gin.Default()
 
 	r.Use(Cors())
-	r.GET("/", index)
 	//Access localhost:port/v1
 
 	v1 := r.Group("v1")
