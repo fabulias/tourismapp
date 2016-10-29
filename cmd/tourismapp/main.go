@@ -43,12 +43,13 @@ func main() {
 	{
 		//Access localhost:port/v1/users
 		v1.GET("/users", routes.GetUsers)
-		v1.GET("/users/:name", routes.GetUser)
+		v1.GET("/users/:rut", routes.GetUser)
 		v1.GET("/places", routes.GetPlaces)
 		v1.GET("/tags", routes.GetTags)
 		v1.GET("/evaluations", routes.GetEvaluations)
 		v1.GET("/schedules/", routes.GetSchedules)
 		v1.GET("/tags_places", routes.GetTagsPlaces)
+		v1.GET("/geocoords", routes.GetGeocoords)
 
 		/*
 			v1.GET("/places/:id", GetPlace)

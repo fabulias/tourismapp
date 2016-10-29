@@ -35,7 +35,7 @@ func pingDatabase() {
 	}
 }
 
-// Responses method GET
+// Responses method GET, all data
 func QueryCustomers() []Customer {
 	connectDatabase()
 	pingDatabase()
@@ -139,7 +139,7 @@ func QueryGeocoords() []Geocoord {
 
 	//tmp almacena en cada iteración el objeto
 	tmp := Geocoord{}
-	tmpPoint := Point{}
+
 	for rows.Next() {
 		err := rows.Scan(
 			&tmp.Id_place,
@@ -147,8 +147,6 @@ func QueryGeocoords() []Geocoord {
 		if err != nil {
 			log.Fatal(err)
 		}
-		tmp.pos.Lat = tmpPoint.Lat
-		tmp.pos.Lng = tmpPoint.Lng
 		geocoords = append(geocoords, tmp)
 	}
 	disconnectDatabase()
@@ -244,4 +242,26 @@ func QueryTagsPlaces() []Tagplace {
 	}
 	disconnectDatabase()
 	return tagsplaces
+}
+
+// Responses methods GET, one data
+func QueryCustomer(rut string) []Customer {
+	connectDatabase()
+	pingDatabase()
+	customer := make([]Customer, 0)
+	cus := Customer{}
+	errq := db.QueryRow("SELECT * FROM customer WHERE rut=$1", rut).Scan(
+		&cus.Name,
+		&cus.Surname,
+		&cus.S_surname,
+		&cus.Rut,
+		&cus.Mail,
+		&cus.Password)
+	disconnectDatabase()
+	if errq != nil {
+		log.Fatalln("Error in query ", errq)
+		return customer
+	}
+	customer = append(customer, cus)
+	return customer
 }

@@ -1,15 +1,16 @@
 package model
 
 import "time"
+import "database/sql/driver"
 
 // Clase que almacenara los datos obtenidos de cada usuario.
 type Customer struct {
-	Name      string
-	Surname   string
-	S_surname string
-	Rut       string
-	Mail      string
-	Password  string
+	Name      string `json:"name" binding:"required"`
+	Surname   string `json:"surname" binding:"required"`
+	S_surname string `json:"s_surname" binding:"required"`
+	Rut       string `json:"rut"`
+	Mail      string `json:"mail" binding:"required"`
+	Password  string `json:"pass" binding:"required"`
 }
 
 // Clase que almacenara los datos obtenidos de cada lugar.
@@ -73,4 +74,12 @@ type Geocoord struct {
 type Point struct {
 	Lat float64
 	Lng float64
+}
+
+func (u *Point) Scan(value interface{}) error {
+	*u = Point(value.(float64))
+	return nil
+}
+func (u Point) Value() (driver.Value, error) {
+	return Point(u), nil
 }
