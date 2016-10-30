@@ -2,9 +2,9 @@ package model
 
 import (
 	"database/sql"
-	"log"
 
 	_ "github.com/lib/pq"
+	"log"
 )
 
 var (
@@ -264,4 +264,24 @@ func QueryCustomer(rut string) []Customer {
 	}
 	customer = append(customer, cus)
 	return customer
+}
+
+func InsertCustomer(user Customer) bool {
+	connectDatabase()
+	pingDatabase()
+	query, _ := db.Prepare("INSERT INTO customer VALUES ($1,$2,$3,$4,$5,$6)")
+	_, errq := query.Exec(
+		user.Name,
+		user.Surname,
+		user.S_surname,
+		user.Rut,
+		user.Mail,
+		user.Password)
+	disconnectDatabase()
+
+	if errq != nil {
+		return false
+	} else {
+		return true
+	}
 }
