@@ -55,17 +55,17 @@ func PostUser(c *gin.Context) {
 	var user model.Customer
 
 	//JSON enviado es enlazado a Variable del tipo Customer user
-	err := c.Bind(&user)
+	err := c.BindJSON(&user)
 	if err != nil {
 		response := gin.H{
 			"status":  "error",
 			"data":    nil,
 			"message": "Missing some field",
 		}
-		c.JSON(http.StatusOK, response)
+		c.JSON(http.StatusBadRequest, response)
 	} else {
-		request := model.InsertCustomer(user)
-		if request == true {
+		status := model.InsertCustomer(user)
+		if status {
 			response := gin.H{
 				"status":  "success",
 				"data":    nil,
@@ -78,7 +78,7 @@ func PostUser(c *gin.Context) {
 				"data":    nil,
 				"message": "Rut already exist",
 			}
-			c.JSON(http.StatusOK, response)
+			c.JSON(http.StatusNotFound, response)
 		}
 	}
 
