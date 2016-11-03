@@ -51,6 +51,11 @@ func main() {
 		v1.GET("/tags_places", routes.GetTagsPlaces)
 
 		v1.POST("/users", routes.PostUser)
+		v1.POST("/places", routes.PostPlace)
+		v1.POST("/tags", routes.PostTag)
+		v1.POST("/tags_places", routes.PostTagPlace)
+		v1.POST("/evaluations", routes.PostEvaluation)
+		v1.POST("/schedules", routes.PostSchedule)
 
 		//v1.GET("/geocoords", routes.GetGeocoords)
 		//v1.POST("/users/:rut", routes.PostUser)

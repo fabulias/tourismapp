@@ -266,6 +266,9 @@ func QueryCustomer(rut string) []Customer {
 	return customer
 }
 
+//Post methods
+//Inserta un nuevo customer en la base de datos, retorna true si el insert fue
+// exitoso, false si ya existe en la bdd
 func InsertCustomer(user Customer) bool {
 	connectDatabase()
 	pingDatabase()
@@ -279,6 +282,93 @@ func InsertCustomer(user Customer) bool {
 		user.Password)
 	disconnectDatabase()
 
+	if errq != nil {
+		return false
+	} else {
+		return true
+	}
+}
+
+//Inserta un nuevo Place en la base de datos, retorna true o false dependiendo
+//del exito de la operación
+func InsertPlace(place Place) bool {
+	connectDatabase()
+	pingDatabase()
+	query, _ := db.Prepare("INSERT INTO place VALUES ($1,$2,$3,$4,$5,$6)")
+	_, errq := query.Exec(
+		place.Id,
+		place.Name,
+		place.Score,
+		place.User_c,
+		place.Date_c,
+		place.Descripcion)
+	disconnectDatabase()
+
+	if errq != nil {
+		return false
+	} else {
+		return true
+	}
+}
+func InsertTag(tag Tag) bool {
+	connectDatabase()
+	pingDatabase()
+	query, _ := db.Prepare("INSERT INTO tags VALUES ($1, $2)")
+	_, errq := query.Exec(
+		tag.Id,
+		tag.Name)
+	disconnectDatabase()
+	if errq != nil {
+		return false
+	} else {
+		return true
+	}
+}
+
+func InsertTagPlace(tagplace Tagplace) bool {
+	connectDatabase()
+	pingDatabase()
+	query, _ := db.Prepare("INSERT INTO tags_places VALUES ($1, $2)")
+	_, errq := query.Exec(
+		tagplace.Id_tags,
+		tagplace.Id_place)
+	disconnectDatabase()
+	if errq != nil {
+		return false
+	} else {
+		return true
+	}
+}
+
+func InsertSchedule(schedule Schedule) bool {
+	connectDatabase()
+	pingDatabase()
+	query, _ := db.Prepare("INSERT INTO schedule VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $10, $11, $12, $13, $14, $15)")
+	_, errq := query.Exec(schedule.Id, schedule.o1, schedule.c1, schedule.o2,
+		schedule.c2, schedule.o3, schedule.c3, schedule.o4,
+		schedule.c4, schedule.o6, schedule.c6, schedule.o7,
+		schedule.c7)
+
+	disconnectDatabase()
+	if errq != nil {
+		return false
+	} else {
+		return true
+	}
+}
+
+func InsertEvaluation(evaluation Evaluation) bool {
+	connectDatabase()
+	pingDatabase()
+	query, _ := db.Prepare("INSERT INTO evaluation VALUES ($1, $2, $3, $4, $5, $6)")
+	_, errq := query.Exec(
+		evaluation.Id,
+		evaluation.Id_user,
+		evaluation.Id_place,
+		evaluation.Score,
+		evaluation.Comment,
+		evaluation.Date)
+	disconnectDatabase()
 	if errq != nil {
 		return false
 	} else {
