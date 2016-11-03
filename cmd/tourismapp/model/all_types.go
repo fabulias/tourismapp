@@ -77,12 +77,10 @@ type Point struct {
 	Lng float64
 }
 
-/*
-func (u *Point) Scan(value interface{}) error {
-	*u = Point(value.(float64))
-	return nil
-}
-func (u Point) Value() (driver.Value, error) {
-	return Point(u), nil
-}
-*/
+//func (u *Point) Scan(value interface{}) error {
+//	*u = Point(value.(float64))
+//	return nil
+//}
+//func (u Point) Value() (driver.Value, error) {
+//	return Point(u), nil
+//}

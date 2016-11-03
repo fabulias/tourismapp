@@ -250,7 +250,13 @@ func QueryCustomer(rut string) []Customer {
 	pingDatabase()
 	customer := make([]Customer, 0)
 	cus := Customer{}
-	errq := db.QueryRow("SELECT * FROM customer WHERE rut=$1", rut).Scan(
+	stmt, errp := db.Prepare("SELECT * FROM customer WHERE rut=$1")
+	if errp != nil {
+		log.Println("Error preparing query", errp)
+		return customer
+	}
+	defer stmt.Close()
+	errq := stmt.QueryRow(rut).Scan(
 		&cus.Name,
 		&cus.Surname,
 		&cus.S_surname,

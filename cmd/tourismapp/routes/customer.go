@@ -37,7 +37,7 @@ func GetUser(c *gin.Context) {
 		response := gin.H{
 			"status":  "error",
 			"data":    nil,
-			"message": "There ir no user with that rut",
+			"message": "There is no user with that rut",
 		}
 		c.JSON(http.StatusNotFound, response)
 	} else {
