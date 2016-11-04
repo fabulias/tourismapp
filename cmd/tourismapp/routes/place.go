@@ -34,6 +34,7 @@ func PostPlace(c *gin.Context) {
 
 	//JSON enviado es enlazado a Variable del tipo Place
 	err := c.Bind(&place)
+	log.Printf("->", place)
 	if err != nil {
 		fmt.Println("Hola estoy en el if\n")
 		log.Fatalln(err)
@@ -44,7 +45,7 @@ func PostPlace(c *gin.Context) {
 		}
 		c.JSON(http.StatusBadRequest, response)
 	} else {
-		fmt.Println("Hola estoy en el else\n")
+
 		status := model.InsertPlace(place)
 		if status {
 			fmt.Println("OK!\n")

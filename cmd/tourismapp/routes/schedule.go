@@ -1,10 +1,12 @@
 package routes
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
 	"log"
 	"net/http"
+	//"time"
 	"tourismapp/cmd/tourismapp/model"
 )
 
@@ -30,10 +32,9 @@ func GetSchedules(c *gin.Context) {
 func PostSchedule(c *gin.Context) {
 	var schedule model.Schedule
 
-	//JSON enviado es enlazado a Variable del tipo Place
+	//JSON enviado es enlazado a Variable del tipo Schedule
 	err := c.Bind(&schedule)
 	if err != nil {
-
 		log.Fatalln(err)
 		response := gin.H{
 			"status":  "error",
@@ -42,6 +43,7 @@ func PostSchedule(c *gin.Context) {
 		}
 		c.JSON(http.StatusBadRequest, response)
 	} else {
+		fmt.Printf("Entre al else, voy a continuar con InsertSchedule")
 		status := model.InsertSchedule(schedule)
 		if status {
 			response := gin.H{
