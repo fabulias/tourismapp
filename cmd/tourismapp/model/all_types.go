@@ -38,21 +38,21 @@ type Tagplace struct {
 
 //Horarios, 7 días de la semana, open-Close por cada día
 type Schedule struct {
-	Id int64
-	o1 time.Time
-	c1 time.Time
-	o2 time.Time
-	c2 time.Time
-	o3 time.Time
-	c3 time.Time
-	o4 time.Time
-	c4 time.Time
-	o5 time.Time
-	c5 time.Time
-	o6 time.Time
-	c6 time.Time
-	o7 time.Time
-	c7 time.Time
+	Id int64     `json:"id" binding:"required"`
+	O1 time.Time `json:"o1" binding:"required"`
+	C1 time.Time `json:"c1" binding:"required"`
+	O2 time.Time `json:"o2" binding:"required"`
+	C2 time.Time `json:"c2" binding:"required"`
+	O3 time.Time `json:"o3" binding:"required"`
+	C3 time.Time `json:"c3" binding:"required"`
+	O4 time.Time `json:"o4" binding:"required"`
+	C4 time.Time `json:"c4" binding:"required"`
+	O5 time.Time `json:"o5" binding:"required"`
+	C5 time.Time `json:"c5" binding:"required"`
+	O6 time.Time `json:"o6" binding:"required"`
+	C6 time.Time `json:"c6" `
+	O7 time.Time `json:"o7" `
+	C7 time.Time `json:"c7" `
 }
 
 // Clase que permite almacenar evaluaciones.

@@ -2,9 +2,10 @@ package model
 
 import (
 	"database/sql"
-
+	//"fmt"
 	_ "github.com/lib/pq"
 	"log"
+	//"time"
 )
 
 var (
@@ -169,20 +170,20 @@ func QuerySchedules() []Schedule {
 	for rows.Next() {
 		err := rows.Scan(
 			&tmp.Id,
-			&tmp.o1,
-			&tmp.c1,
-			&tmp.o2,
-			&tmp.c2,
-			&tmp.o3,
-			&tmp.c3,
-			&tmp.o4,
-			&tmp.c4,
-			&tmp.o5,
-			&tmp.c5,
-			&tmp.o6,
-			&tmp.c6,
-			&tmp.o7,
-			&tmp.c7)
+			&tmp.O1,
+			&tmp.C1,
+			&tmp.O2,
+			&tmp.C2,
+			&tmp.O3,
+			&tmp.C3,
+			&tmp.O4,
+			&tmp.C4,
+			&tmp.O5,
+			&tmp.C5,
+			&tmp.O6,
+			&tmp.C6,
+			&tmp.O7,
+			&tmp.C7)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -316,6 +317,7 @@ func InsertPlace(place Place) bool {
 		return true
 	}
 }
+
 func InsertTag(tag Tag) bool {
 	connectDatabase()
 	pingDatabase()
@@ -349,13 +351,27 @@ func InsertTagPlace(tagplace Tagplace) bool {
 func InsertSchedule(schedule Schedule) bool {
 	connectDatabase()
 	pingDatabase()
-	query, _ := db.Prepare("INSERT INTO schedule VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $10, $11, $12, $13, $14, $15)")
-	_, errq := query.Exec(schedule.Id, schedule.o1, schedule.c1, schedule.o2,
-		schedule.c2, schedule.o3, schedule.c3, schedule.o4,
-		schedule.c4, schedule.o6, schedule.c6, schedule.o7,
-		schedule.c7)
+
+	query, _ := db.Prepare("INSERT INTO schedule VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)")
+	_, errq := query.Exec(
+		schedule.Id,
+		schedule.O1,
+		schedule.C1,
+		schedule.O2,
+		schedule.C2,
+		schedule.O3,
+		schedule.C3,
+		schedule.O4,
+		schedule.C4,
+		schedule.O5,
+		schedule.C5,
+		schedule.O6,
+		schedule.C6,
+		schedule.O7,
+		schedule.C7)
 
 	disconnectDatabase()
+	//log.Fatalln(errq)
 	if errq != nil {
 		return false
 	} else {
@@ -366,6 +382,7 @@ func InsertSchedule(schedule Schedule) bool {
 func InsertEvaluation(evaluation Evaluation) bool {
 	connectDatabase()
 	pingDatabase()
+
 	query, _ := db.Prepare("INSERT INTO evaluation VALUES ($1, $2, $3, $4, $5, $6)")
 	_, errq := query.Exec(
 		evaluation.Id,
