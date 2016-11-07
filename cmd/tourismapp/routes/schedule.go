@@ -27,6 +27,28 @@ func GetSchedules(c *gin.Context) {
 		c.JSON(http.StatusOK, response)
 	}
 }
+
+//Método que busca los datos de un horario por su id.
+func GetSchedule(c *gin.Context) {
+	id := c.Param("id")
+	schedule := model.QuerySchedule(id)
+	if len(schedule) == 0 {
+		response := gin.H{
+			"status":  "error",
+			"data":    nil,
+			"message": "There is no schedule with that id",
+		}
+		c.JSON(http.StatusNotFound, response)
+	} else {
+		response := gin.H{
+			"status":  "success",
+			"data":    schedule,
+			"message": nil,
+		}
+		c.JSON(http.StatusOK, response)
+	}
+}
+
 func PostSchedule(c *gin.Context) {
 	var schedule model.Schedule
 

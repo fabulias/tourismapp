@@ -27,6 +27,39 @@ func GetTagsPlaces(c *gin.Context) {
 		c.JSON(http.StatusOK, response)
 	}
 }
+
+//Método que busca los datos de un usuario por su id.
+func GetTagPlace(c *gin.Context) {
+	idp := c.Query("idp")
+	idt := c.Query("idt")
+	if idp == "" || idt == "" {
+		response := gin.H{
+			"status":  "error",
+			"data":    nil,
+			"message": "I can't found idp and idt :( ",
+		}
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+	log.Println(idp, " idt -> ", idt)
+	tag := model.QueryTagsPlace(idp, idt)
+	if len(tag) == 0 {
+		response := gin.H{
+			"status":  "error",
+			"data":    nil,
+			"message": "There is no tag with those IDs",
+		}
+		c.JSON(http.StatusNotFound, response)
+	} else {
+		response := gin.H{
+			"status":  "success",
+			"data":    tag,
+			"message": nil,
+		}
+		c.JSON(http.StatusOK, response)
+	}
+}
+
 func PostTagPlace(c *gin.Context) {
 	var tagplace model.Tagplace
 

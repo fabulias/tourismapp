@@ -29,6 +29,27 @@ func GetPlaces(c *gin.Context) {
 	}
 }
 
+//Método que busca los datos de un lugar por su id.
+func GetPlace(c *gin.Context) {
+	id := c.Param("id")
+	place := model.QueryPlace(id)
+	if len(place) == 0 {
+		response := gin.H{
+			"status":  "error",
+			"data":    nil,
+			"message": "There is no place with that id",
+		}
+		c.JSON(http.StatusNotFound, response)
+	} else {
+		response := gin.H{
+			"status":  "success",
+			"data":    place,
+			"message": nil,
+		}
+		c.JSON(http.StatusOK, response)
+	}
+}
+
 func PostPlace(c *gin.Context) {
 	var place model.Place
 
