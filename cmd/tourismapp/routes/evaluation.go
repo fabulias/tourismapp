@@ -28,6 +28,27 @@ func GetEvaluations(c *gin.Context) {
 	}
 }
 
+//Método que busca los datos de una evaluación por su id.
+func GetEvaluation(c *gin.Context) {
+	id := c.Param("id")
+	evaluation := model.QueryEvaluation(id)
+	if len(evaluation) == 0 {
+		response := gin.H{
+			"status":  "error",
+			"data":    nil,
+			"message": "There is no evaluation with that id",
+		}
+		c.JSON(http.StatusNotFound, response)
+	} else {
+		response := gin.H{
+			"status":  "success",
+			"data":    evaluation,
+			"message": nil,
+		}
+		c.JSON(http.StatusOK, response)
+	}
+}
+
 func PostEvaluation(c *gin.Context) {
 	var evaluation model.Evaluation
 

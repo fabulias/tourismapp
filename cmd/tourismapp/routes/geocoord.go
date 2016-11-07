@@ -27,3 +27,24 @@ func GetGeocoords(c *gin.Context) {
 		c.JSON(http.StatusOK, response)
 	}
 }
+
+//Método que busca los datos de un usuario por su id.
+func GetGeocoord(c *gin.Context) {
+	id := c.Param("id")
+	geocoord := model.QueryGeocoord(id)
+	if len(geocoord) == 0 {
+		response := gin.H{
+			"status":  "error",
+			"data":    nil,
+			"message": "There is no geocoord with that id",
+		}
+		c.JSON(http.StatusNotFound, response)
+	} else {
+		response := gin.H{
+			"status":  "success",
+			"data":    geocoord,
+			"message": nil,
+		}
+		c.JSON(http.StatusOK, response)
+	}
+}

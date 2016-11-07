@@ -1,8 +1,10 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
-//import "database/sql/driver"
+//import
 
 // Clase que almacenara los datos obtenidos de cada usuario.
 type Customer struct {
@@ -22,6 +24,7 @@ type Place struct {
 	User_c      string    `json:"user" binding:"required"`
 	Date_c      time.Time `json:"date" binding:"required"`
 	Descripcion string    `json:"note" binding:"required"`
+	Fono        int64     `json:"fono" binding:"required"`
 }
 
 // Clase que almacenara los datos obtenidos de cada tag.
@@ -50,9 +53,9 @@ type Schedule struct {
 	O5 time.Time `json:"o5" binding:"required"`
 	C5 time.Time `json:"c5" binding:"required"`
 	O6 time.Time `json:"o6" binding:"required"`
-	C6 time.Time `json:"c6" `
-	O7 time.Time `json:"o7" `
-	C7 time.Time `json:"c7" `
+	C6 time.Time `json:"c6" binding:"required"`
+	O7 time.Time `json:"o7" binding:"required"`
+	C7 time.Time `json:"c7" binding:"required"`
 }
 
 // Clase que permite almacenar evaluaciones.
@@ -68,19 +71,6 @@ type Evaluation struct {
 // Clase que almacena coordenadas y id de un lugar.
 type Geocoord struct {
 	Id_place int64
-	pos      Point
+	Lat      float64
+	Lng      float64
 }
-
-// Clase que almacena las coordenadas.
-type Point struct {
-	Lat float64
-	Lng float64
-}
-
-//func (u *Point) Scan(value interface{}) error {
-//	*u = Point(value.(float64))
-//	return nil
-//}
-//func (u Point) Value() (driver.Value, error) {
-//	return Point(u), nil
-//}

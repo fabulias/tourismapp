@@ -2,7 +2,6 @@ package model
 
 import (
 	"database/sql"
-	//"fmt"
 	_ "github.com/lib/pq"
 	"log"
 	//"time"
@@ -16,7 +15,7 @@ var (
 func connectDatabase() {
 	db, err = sql.Open("postgres", "postgres://eozcyemimcuhgg:3ac2YMMZ0EMofFw6rdrTXIky6W@ec2-107-22-250-212.compute-1.amazonaws.com:5432/da6rnltctu258a") //os.Getenv("DATABASE_URL"))
 	if err != nil {
-		log.Fatalln("Error opening database: %q", err)
+		log.Println("Error opening database: %q", err)
 		DATABASE_URL := "postgres://eozcyemimcuhgg:3ac2YMMZ0EMofFw6rdrTXIky6W@ec2-107-22-250-212.compute-1.amazonaws.com:5432/da6rnltctu258a"
 		db, err = sql.Open("postgres", DATABASE_URL)
 	}
@@ -25,18 +24,20 @@ func connectDatabase() {
 func disconnectDatabase() {
 	err = db.Close()
 	if err != nil {
-		log.Fatalln("Error closing database: %q", err)
+		log.Println("Error closing database: %q", err)
 	}
 }
 
 func pingDatabase() {
 	err = db.Ping()
 	if err != nil {
-		log.Fatalln("Error ping to database", err)
+		log.Println("Error ping to database", err)
 	}
 }
 
+//
 // Responses method GET, all data
+//
 func QueryCustomers() []Customer {
 	connectDatabase()
 	pingDatabase()
@@ -59,7 +60,7 @@ func QueryCustomers() []Customer {
 			&tmp.Mail,
 			&tmp.Password)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		customers = append(customers, tmp)
 	}
@@ -87,9 +88,10 @@ func QueryPlaces() []Place {
 			&tmp.Score,
 			&tmp.User_c,
 			&tmp.Date_c,
-			&tmp.Descripcion)
+			&tmp.Descripcion,
+			&tmp.Fono)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		places = append(places, tmp)
 	}
@@ -119,7 +121,7 @@ func QueryEvaluations() []Evaluation {
 			&tmp.Comment,
 			&tmp.Date)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		evaluations = append(evaluations, tmp)
 	}
@@ -144,9 +146,10 @@ func QueryGeocoords() []Geocoord {
 	for rows.Next() {
 		err := rows.Scan(
 			&tmp.Id_place,
-			&tmp.pos)
+			&tmp.Lat,
+			&tmp.Lng)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		geocoords = append(geocoords, tmp)
 	}
@@ -185,7 +188,7 @@ func QuerySchedules() []Schedule {
 			&tmp.O7,
 			&tmp.C7)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		schedules = append(schedules, tmp)
 	}
@@ -211,7 +214,7 @@ func QueryTags() []Tag {
 			&tmp.Id,
 			&tmp.Name)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		tags = append(tags, tmp)
 	}
@@ -237,7 +240,7 @@ func QueryTagsPlaces() []Tagplace {
 			&tmp.Id_tags,
 			&tmp.Id_place)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		tagsplaces = append(tagsplaces, tmp)
 	}
@@ -245,7 +248,9 @@ func QueryTagsPlaces() []Tagplace {
 	return tagsplaces
 }
 
+//
 // Responses methods GET, one data
+//
 func QueryCustomer(rut string) []Customer {
 	connectDatabase()
 	pingDatabase()
@@ -266,11 +271,174 @@ func QueryCustomer(rut string) []Customer {
 		&cus.Password)
 	disconnectDatabase()
 	if errq != nil {
-		log.Fatalln("Error in query ", errq)
+		log.Println("Error in query ", errq)
 		return customer
 	}
 	customer = append(customer, cus)
 	return customer
+}
+
+func QueryEvaluation(id string) []Evaluation {
+	connectDatabase()
+	pingDatabase()
+	evaluation := make([]Evaluation, 0)
+	ev := Evaluation{}
+	stmt, errp := db.Prepare("SELECT * FROM evaluation WHERE id=$1")
+	if errp != nil {
+		log.Println("Error preparing query", errp)
+		return evaluation
+	}
+	defer stmt.Close()
+	errq := stmt.QueryRow(id).Scan(
+		&ev.Id,
+		&ev.Id_user,
+		&ev.Id_place,
+		&ev.Score,
+		&ev.Comment,
+		&ev.Date)
+	disconnectDatabase()
+	if errq != nil {
+		log.Println("Error in query ", errq)
+		return evaluation
+	}
+	evaluation = append(evaluation, ev)
+	return evaluation
+}
+
+func QueryGeocoord(id string) []Geocoord {
+	connectDatabase()
+	pingDatabase()
+	geocoord := make([]Geocoord, 0)
+	geo := Geocoord{}
+	stmt, errp := db.Prepare("SELECT * FROM geocoord WHERE id=$1")
+	if errp != nil {
+		log.Println("Error preparing query", errp)
+		return geocoord
+	}
+	defer stmt.Close()
+	errq := stmt.QueryRow(id).Scan(
+		&geo.Id_place,
+		&geo.Lat,
+		&geo.Lng)
+	disconnectDatabase()
+	if errq != nil {
+		log.Println("Error in query ", errq)
+		return geocoord
+	}
+	geocoord = append(geocoord, geo)
+	return geocoord
+}
+
+func QueryPlace(id string) []Place {
+	connectDatabase()
+	pingDatabase()
+	place := make([]Place, 0)
+	plc := Place{}
+	stmt, errp := db.Prepare("SELECT * FROM place WHERE id=$1")
+	if errp != nil {
+		log.Println("Error preparing query", errp)
+		return place
+	}
+	defer stmt.Close()
+	errq := stmt.QueryRow(id).Scan(
+		&plc.Id,
+		&plc.Name,
+		&plc.Score,
+		&plc.User_c,
+		&plc.Date_c,
+		&plc.Descripcion,
+		&plc.Fono)
+	disconnectDatabase()
+	if errq != nil {
+		log.Println("Error in query ", errq)
+		return place
+	}
+	place = append(place, plc)
+	return place
+}
+
+func QuerySchedule(rut string) []Schedule {
+	connectDatabase()
+	pingDatabase()
+	schedule := make([]Schedule, 0)
+	sh := Schedule{}
+	stmt, errp := db.Prepare("SELECT * FROM schedule WHERE id=$1")
+	if errp != nil {
+		log.Println("Error preparing query", errp)
+		return schedule
+	}
+	defer stmt.Close()
+	errq := stmt.QueryRow(rut).Scan(
+		&sh.Id,
+		&sh.O1,
+		&sh.C1,
+		&sh.O2,
+		&sh.C2,
+		&sh.O3,
+		&sh.C3,
+		&sh.O4,
+		&sh.C4,
+		&sh.O5,
+		&sh.C5,
+		&sh.O6,
+		&sh.C6,
+		&sh.O7,
+		&sh.C7)
+	disconnectDatabase()
+	if errq != nil {
+		log.Println("Error in query ", errq)
+		return schedule
+	}
+	schedule = append(schedule, sh)
+	return schedule
+}
+
+func QueryTag(id string) []Tag {
+	connectDatabase()
+	pingDatabase()
+	tag := make([]Tag, 0)
+	t := Tag{}
+	stmt, errp := db.Prepare("SELECT * FROM tags WHERE id=$1")
+	if errp != nil {
+		log.Println("Error preparing query", errp)
+		return tag
+	}
+	defer stmt.Close()
+	errq := stmt.QueryRow(id).Scan(
+		&t.Id,
+		&t.Name)
+	disconnectDatabase()
+	if errq != nil {
+		log.Println("Error in query ", errq)
+		return tag
+	}
+	tag = append(tag, t)
+	return tag
+}
+
+func QueryTagsPlace(idp, idt string) []Tagplace {
+	connectDatabase()
+	pingDatabase()
+	tagplace := make([]Tagplace, 0)
+	t := Tagplace{}
+	stmt, errp := db.Prepare("SELECT * FROM tags_places WHERE id_tag=$1 AND id_place=$2")
+	if errp != nil {
+		log.Println("Error preparing query", errp)
+		return tagplace
+	}
+	defer stmt.Close()
+	id_t, _ := strconv.ParseInt(idt, 10, 8)
+	id_p, _ := strconv.ParseInt(idp, 10, 8)
+	errq := stmt.QueryRow(id_t, id_p).Scan(
+		&t.Id_tags,
+		&t.Id_place)
+	disconnectDatabase()
+	if errq != nil {
+		log.Println("Error in query ", errq)
+		return tagplace
+	}
+	tagplace = append(tagplace, t)
+	return tagplace
 }
 
 //Post methods

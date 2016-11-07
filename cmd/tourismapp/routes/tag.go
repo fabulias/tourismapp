@@ -27,6 +27,28 @@ func GetTags(c *gin.Context) {
 		c.JSON(http.StatusOK, response)
 	}
 }
+
+//Método que busca los datos de un tag por su id.
+func GetTag(c *gin.Context) {
+	id := c.Param("id")
+	tag := model.QueryTag(id)
+	if len(tag) == 0 {
+		response := gin.H{
+			"status":  "error",
+			"data":    nil,
+			"message": "There is no tag with that id",
+		}
+		c.JSON(http.StatusNotFound, response)
+	} else {
+		response := gin.H{
+			"status":  "success",
+			"data":    tag,
+			"message": nil,
+		}
+		c.JSON(http.StatusOK, response)
+	}
+}
+
 func PostTag(c *gin.Context) {
 	var tag model.Tag
 
