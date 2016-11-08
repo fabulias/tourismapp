@@ -110,3 +110,36 @@ func PatchPlace(c *gin.Context) {
 		}
 	}
 }
+
+func DeletePlace(c *gin.Context) {
+	id := c.Param("id")
+	var pl model.Place
+	place := model.QueryPlace(id)
+
+	if len(place) == 0 {
+		response := gin.H{
+			"status":  "error",
+			"data":    nil,
+			"message": "There is no place with that id",
+		}
+		c.JSON(http.StatusNotFound, response)
+	} else {
+		c.BindJSON(&pl)
+		status := model.ErasePlace(id)
+		if status {
+			response := gin.H{
+				"status":  "success",
+				"data":    nil,
+				"message": "",
+			}
+			c.JSON(http.StatusOK, response)
+		} else {
+			response := gin.H{
+				"status":  "error",
+				"data":    nil,
+				"message": "Erase failed!",
+			}
+			c.JSON(http.StatusNotFound, response)
+		}
+	}
+}

@@ -113,3 +113,36 @@ func PatchEvaluation(c *gin.Context) {
 		}
 	}
 }
+
+func DeleteEvaluation(c *gin.Context) {
+	id := c.Param("id")
+	var eval model.Evaluation
+	evaluation := model.QueryEvaluation(id)
+
+	if len(evaluation) == 0 {
+		response := gin.H{
+			"status":  "error",
+			"data":    nil,
+			"message": "There is no evaluation with that id",
+		}
+		c.JSON(http.StatusNotFound, response)
+	} else {
+		c.BindJSON(&eval)
+		status := model.EraseEvaluation(id)
+		if status {
+			response := gin.H{
+				"status":  "success",
+				"data":    nil,
+				"message": "",
+			}
+			c.JSON(http.StatusOK, response)
+		} else {
+			response := gin.H{
+				"status":  "error",
+				"data":    nil,
+				"message": "Erase failed!",
+			}
+			c.JSON(http.StatusNotFound, response)
+		}
+	}
+}

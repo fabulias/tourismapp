@@ -105,3 +105,16 @@ func UpdatePlace(place Place) bool {
 		return true
 	}
 }
+
+func ErasePlace(id string) bool {
+	connectDatabase()
+	pingDatabase()
+	query, _ := db.Prepare("update place set status='false' where id=$1")
+	_, errq := query.Exec(id)
+	disconnectDatabase()
+	if errq != nil {
+		return false
+	} else {
+		return true
+	}
+}

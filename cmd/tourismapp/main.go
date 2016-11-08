@@ -69,24 +69,10 @@ func main() {
 		v1.PATCH("/places/:id", routes.PatchPlace)
 		v1.PATCH("/schedules/:id", routes.PatchSchedule)
 		v1.PATCH("/tags/:id", routes.PatchTag)
-		/*
 
-
-			v1.DELETE("/customers", routes.)
-			v1.DELETE("/customers/:rut", routes.)
-			v1.DELETE("/evaluations", routes.)
-			v1.DELETE("/evaluations/:id", routes.)
-			v1.DELETE("/geocoords", routes.)
-			v1.DELETE("/geocoords/:id", routes.)
-			v1.DELETE("/places", routes.)
-			v1.DELETE("/places/:id", routes.)
-			v1.DELETE("/schedules", routes.)
-			v1.DELETE("/schedules/:id", routes.)
-			v1.DELETE("/tags", routes.)
-			v1.DELETE("/tags/:id", routes.)
-			v1.DELETE("/tags_places", routes.)
-			v1.DELETE("/tags_place", routes.)
-		*/
+		v1.DELETE("/customers/:rut", routes.DeleteUser)
+		v1.DELETE("/evaluations/:id", routes.DeleteEvaluation)
+		v1.DELETE("/places/:id", routes.DeletePlace)
 	}
 	log.Println("Uploading...", time.Now())
 	log.Println("Running on port : " + port)

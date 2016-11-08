@@ -68,6 +68,7 @@ type Evaluation struct {
 	Score    int64     `json:"score"`
 	Comment  string    `json:"comment"`
 	Date     time.Time `json:"date"`
+	Status   bool      `json:"status"`
 }
 
 // Clase que almacena coordenadas y id de un lugar.

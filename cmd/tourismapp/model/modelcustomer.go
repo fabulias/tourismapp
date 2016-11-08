@@ -103,3 +103,16 @@ func UpdateCustomer(customer Customer) bool {
 		return true
 	}
 }
+
+func EraseCustomer(rut string) bool {
+	connectDatabase()
+	pingDatabase()
+	query, _ := db.Prepare("update customer set status='false' where rut=$1")
+	_, errq := query.Exec(rut)
+	disconnectDatabase()
+	if errq != nil {
+		return false
+	} else {
+		return true
+	}
+}

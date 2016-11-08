@@ -22,7 +22,8 @@ func QueryEvaluations() []Evaluation {
 			&tmp.Id_place,
 			&tmp.Score,
 			&tmp.Comment,
-			&tmp.Date)
+			&tmp.Date,
+			&tmp.Status)
 		if err != nil {
 			log.Println(err)
 		}
@@ -49,7 +50,8 @@ func QueryEvaluation(id string) []Evaluation {
 		&ev.Id_place,
 		&ev.Score,
 		&ev.Comment,
-		&ev.Date)
+		&ev.Date,
+		&ev.Status)
 	disconnectDatabase()
 	if errq != nil {
 		log.Println("Error in query ", errq)
@@ -70,7 +72,8 @@ func InsertEvaluation(evaluation Evaluation) bool {
 		evaluation.Id_place,
 		evaluation.Score,
 		evaluation.Comment,
-		evaluation.Date)
+		evaluation.Date,
+		evaluation.Status)
 	disconnectDatabase()
 	if errq != nil {
 		return false
@@ -82,14 +85,28 @@ func InsertEvaluation(evaluation Evaluation) bool {
 func UpdateEvaluation(eval Evaluation) bool {
 	connectDatabase()
 	pingDatabase()
-	query, _ := db.Prepare("update evaluation set id_user=$1, id_place=$2, score=$3, comment=$4, date=$5 where id=$6")
+	query, _ := db.Prepare("update evaluation set id_user=$1, id_place=$2, score=$3, comment=$4, date=$5, status=$6 where id=$7")
 	_, errq := query.Exec(
 		eval.Id_user,
 		eval.Id_place,
 		eval.Score,
 		eval.Comment,
 		eval.Date,
+		eval.Status,
 		eval.Id)
+	disconnectDatabase()
+	if errq != nil {
+		return false
+	} else {
+		return true
+	}
+}
+
+func EraseEvaluation(id string) bool {
+	connectDatabase()
+	pingDatabase()
+	query, _ := db.Prepare("update customer set status='false' where rut=$1")
+	_, errq := query.Exec(id)
 	disconnectDatabase()
 	if errq != nil {
 		return false
