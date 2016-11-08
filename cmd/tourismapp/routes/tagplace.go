@@ -41,7 +41,7 @@ func GetTagPlace(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
-	log.Println(idp, " idt -> ", idt)
+
 	tag := model.QueryTagsPlace(idp, idt)
 	if len(tag) == 0 {
 		response := gin.H{
@@ -91,5 +91,4 @@ func PostTagPlace(c *gin.Context) {
 			c.JSON(http.StatusNotFound, response)
 		}
 	}
-
 }

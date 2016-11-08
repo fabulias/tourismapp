@@ -83,5 +83,37 @@ func PostSchedule(c *gin.Context) {
 			c.JSON(http.StatusNotFound, response)
 		}
 	}
+}
 
+func PatchSchedule(c *gin.Context) {
+	id := c.Param("id")
+	var user model.Schedule
+	schedule := model.QuerySchedule(id)
+
+	if len(schedule) == 0 {
+		response := gin.H{
+			"status":  "error",
+			"data":    nil,
+			"message": "There is no user with that id",
+		}
+		c.JSON(http.StatusNotFound, response)
+	} else {
+		c.BindJSON(&user)
+		status := model.UpdateSchedule(user)
+		if status {
+			response := gin.H{
+				"status":  "success",
+				"data":    user,
+				"message": "",
+			}
+			c.JSON(http.StatusOK, response)
+		} else {
+			response := gin.H{
+				"status":  "success",
+				"data":    nil,
+				"message": "Upload failed!",
+			}
+			c.JSON(http.StatusNotFound, response)
+		}
+	}
 }

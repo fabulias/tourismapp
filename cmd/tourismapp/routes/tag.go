@@ -81,3 +81,36 @@ func PostTag(c *gin.Context) {
 		}
 	}
 }
+
+func PatchTag(c *gin.Context) {
+	id := c.Param("id")
+	var t model.Tag
+	tag := model.QueryTag(id)
+
+	if len(tag) == 0 {
+		response := gin.H{
+			"status":  "error",
+			"data":    nil,
+			"message": "There is no tag with that id",
+		}
+		c.JSON(http.StatusNotFound, response)
+	} else {
+		c.BindJSON(&t)
+		status := model.UpdateTag(t)
+		if status {
+			response := gin.H{
+				"status":  "success",
+				"data":    t,
+				"message": "",
+			}
+			c.JSON(http.StatusOK, response)
+		} else {
+			response := gin.H{
+				"status":  "success",
+				"data":    nil,
+				"message": "Upload failed!",
+			}
+			c.JSON(http.StatusNotFound, response)
+		}
+	}
+}

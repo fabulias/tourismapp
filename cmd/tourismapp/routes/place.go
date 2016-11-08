@@ -1,10 +1,8 @@
 package routes
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
-	"log"
 	"net/http"
 	"tourismapp/cmd/tourismapp/model"
 )
@@ -52,13 +50,8 @@ func GetPlace(c *gin.Context) {
 
 func PostPlace(c *gin.Context) {
 	var place model.Place
-
-	//JSON enviado es enlazado a Variable del tipo Place
 	err := c.Bind(&place)
-	log.Printf("->", place)
 	if err != nil {
-		fmt.Println("Hola estoy en el if\n")
-		log.Fatalln(err)
 		response := gin.H{
 			"status":  "error",
 			"data":    nil,
@@ -66,10 +59,8 @@ func PostPlace(c *gin.Context) {
 		}
 		c.JSON(http.StatusBadRequest, response)
 	} else {
-
 		status := model.InsertPlace(place)
 		if status {
-			fmt.Println("OK!\n")
 			response := gin.H{
 				"status":  "success",
 				"data":    nil,
@@ -77,14 +68,45 @@ func PostPlace(c *gin.Context) {
 			}
 			c.JSON(http.StatusOK, response)
 		} else {
-			fmt.Println("bu!\n")
 			response := gin.H{
 				"status":  "success",
 				"data":    nil,
-				"message": "Rut already exist",
+				"message": "place already exist",
 			}
 			c.JSON(http.StatusNotFound, response)
 		}
 	}
+}
 
+func PatchPlace(c *gin.Context) {
+	id := c.Param("id")
+	var pl model.Place
+	place := model.QueryPlace(id)
+
+	if len(place) == 0 {
+		response := gin.H{
+			"status":  "error",
+			"data":    nil,
+			"message": "There is no place with that id",
+		}
+		c.JSON(http.StatusNotFound, response)
+	} else {
+		c.BindJSON(&pl)
+		status := model.UpdatePlace(pl)
+		if status {
+			response := gin.H{
+				"status":  "success",
+				"data":    pl,
+				"message": "",
+			}
+			c.JSON(http.StatusOK, response)
+		} else {
+			response := gin.H{
+				"status":  "success",
+				"data":    nil,
+				"message": "Upload failed!",
+			}
+			c.JSON(http.StatusNotFound, response)
+		}
+	}
 }

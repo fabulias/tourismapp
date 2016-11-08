@@ -48,3 +48,67 @@ func GetGeocoord(c *gin.Context) {
 		c.JSON(http.StatusOK, response)
 	}
 }
+
+func PostGeocoord(c *gin.Context) {
+	var geocoord model.Geocoord
+
+	err := c.Bind(&geocoord)
+	if err != nil {
+		response := gin.H{
+			"status":  "error",
+			"data":    nil,
+			"message": "Missing some field required",
+		}
+		c.JSON(http.StatusBadRequest, response)
+	} else {
+		status := model.InsertGeocoord(geocoord)
+		if status {
+			response := gin.H{
+				"status":  "success",
+				"data":    nil,
+				"message": "Success insert",
+			}
+			c.JSON(http.StatusOK, response)
+		} else {
+			response := gin.H{
+				"status":  "success",
+				"data":    nil,
+				"message": "geocoord already exist",
+			}
+			c.JSON(http.StatusNotFound, response)
+		}
+	}
+}
+
+func PatchGeocoord(c *gin.Context) {
+	id := c.Param("id")
+	var geo model.Geocoord
+	geocoord := model.QueryGeocoord(id)
+
+	if len(geocoord) == 0 {
+		response := gin.H{
+			"status":  "error",
+			"data":    nil,
+			"message": "There is no geocoord with that id",
+		}
+		c.JSON(http.StatusNotFound, response)
+	} else {
+		c.BindJSON(&geo)
+		status := model.UpdateGeocoord(geo)
+		if status {
+			response := gin.H{
+				"status":  "success",
+				"data":    geo,
+				"message": "",
+			}
+			c.JSON(http.StatusOK, response)
+		} else {
+			response := gin.H{
+				"status":  "success",
+				"data":    nil,
+				"message": "Upload failed!",
+			}
+			c.JSON(http.StatusNotFound, response)
+		}
+	}
+}

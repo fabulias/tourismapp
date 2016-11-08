@@ -51,12 +51,10 @@ func GetEvaluation(c *gin.Context) {
 
 func PostEvaluation(c *gin.Context) {
 	var evaluation model.Evaluation
-
-	//JSON enviado es enlazado a Variable del tipo Place
 	err := c.Bind(&evaluation)
-	if err != nil {
 
-		log.Fatalln(err)
+	if err != nil {
+		log.Println(err)
 		response := gin.H{
 			"status":  "error",
 			"data":    nil,
@@ -64,10 +62,8 @@ func PostEvaluation(c *gin.Context) {
 		}
 		c.JSON(http.StatusBadRequest, response)
 	} else {
-
 		status := model.InsertEvaluation(evaluation)
 		if status {
-
 			response := gin.H{
 				"status":  "success",
 				"data":    nil,
@@ -75,14 +71,45 @@ func PostEvaluation(c *gin.Context) {
 			}
 			c.JSON(http.StatusOK, response)
 		} else {
-
 			response := gin.H{
 				"status":  "success",
 				"data":    nil,
-				"message": "Rut already exist",
+				"message": "id evaluation already exist",
 			}
 			c.JSON(http.StatusNotFound, response)
 		}
 	}
+}
 
+func PatchEvaluation(c *gin.Context) {
+	rut := c.Param("id")
+	var eval model.Evaluation
+	evaluation := model.QueryEvaluation(rut)
+
+	if len(evaluation) == 0 {
+		response := gin.H{
+			"status":  "error",
+			"data":    nil,
+			"message": "There is no eval with that id",
+		}
+		c.JSON(http.StatusNotFound, response)
+	} else {
+		c.BindJSON(&eval)
+		status := model.UpdateEvaluation(eval)
+		if status {
+			response := gin.H{
+				"status":  "success",
+				"data":    eval,
+				"message": "",
+			}
+			c.JSON(http.StatusOK, response)
+		} else {
+			response := gin.H{
+				"status":  "success",
+				"data":    nil,
+				"message": "Upload failed!",
+			}
+			c.JSON(http.StatusNotFound, response)
+		}
+	}
 }

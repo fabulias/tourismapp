@@ -81,5 +81,37 @@ func PostUser(c *gin.Context) {
 			c.JSON(http.StatusNotFound, response)
 		}
 	}
+}
 
+func PatchUser(c *gin.Context) {
+	rut := c.Param("rut")
+	var user model.Customer
+	customer := model.QueryCustomer(rut)
+
+	if len(customer) == 0 {
+		response := gin.H{
+			"status":  "error",
+			"data":    nil,
+			"message": "There is no user with that rut",
+		}
+		c.JSON(http.StatusNotFound, response)
+	} else {
+		c.BindJSON(&user)
+		status := model.UpdateCustomer(user)
+		if status {
+			response := gin.H{
+				"status":  "success",
+				"data":    user,
+				"message": "",
+			}
+			c.JSON(http.StatusOK, response)
+		} else {
+			response := gin.H{
+				"status":  "success",
+				"data":    nil,
+				"message": "Upload failed!",
+			}
+			c.JSON(http.StatusNotFound, response)
+		}
+	}
 }
