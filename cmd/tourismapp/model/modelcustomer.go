@@ -61,6 +61,34 @@ func QueryCustomer(rut string) []Customer {
 	return customer
 }
 
+func QueryCustomerM(mail string) []Customer {
+	connectDatabase()
+	pingDatabase()
+	customer := make([]Customer, 0)
+	cus := Customer{}
+	stmt, errp := db.Prepare("SELECT * FROM customer WHERE mail=$1 AND status=true")
+	if errp != nil {
+		log.Println("Error preparing query", errp)
+		return customer
+	}
+	defer stmt.Close()
+	errq := stmt.QueryRow(mail).Scan(
+		&cus.Name,
+		&cus.Surname,
+		&cus.S_surname,
+		&cus.Rut,
+		&cus.Mail,
+		&cus.Password,
+		&cus.Status)
+	disconnectDatabase()
+	if errq != nil {
+		log.Println("Error in query ", errq)
+		return customer
+	}
+	customer = append(customer, cus)
+	return customer
+}
+
 //Inserta un nuevo customer en la base de datos, retorna true si el insert fue
 // exitoso, false si ya existe en la bdd
 func InsertCustomer(user Customer) bool {

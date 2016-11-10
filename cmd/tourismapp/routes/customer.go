@@ -50,6 +50,26 @@ func GetUser(c *gin.Context) {
 	}
 }
 
+func GetUserM(c *gin.Context) {
+	mail := c.Param("mail")
+	customer := model.QueryCustomerM(mail)
+	if len(customer) == 0 {
+		response := gin.H{
+			"status":  "error",
+			"data":    nil,
+			"message": "There is no user with that mail",
+		}
+		c.JSON(http.StatusNotFound, response)
+	} else {
+		response := gin.H{
+			"status":  "success",
+			"data":    customer,
+			"message": nil,
+		}
+		c.JSON(http.StatusOK, response)
+	}
+}
+
 //Método que inserta un nuevo usuario en la base de datos
 func PostUser(c *gin.Context) {
 	var user model.Customer
