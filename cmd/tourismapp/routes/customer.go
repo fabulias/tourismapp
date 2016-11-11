@@ -31,28 +31,8 @@ func GetUsers(c *gin.Context) {
 
 //Método que busca los datos de un usuario por su id.
 func GetUser(c *gin.Context) {
-	rut := c.Param("rut")
-	customer := model.QueryCustomer(rut)
-	if len(customer) == 0 {
-		response := gin.H{
-			"status":  "error",
-			"data":    nil,
-			"message": "There is no user with that rut",
-		}
-		c.JSON(http.StatusNotFound, response)
-	} else {
-		response := gin.H{
-			"status":  "success",
-			"data":    customer,
-			"message": nil,
-		}
-		c.JSON(http.StatusOK, response)
-	}
-}
-
-func GetUserM(c *gin.Context) {
 	mail := c.Param("mail")
-	customer := model.QueryCustomerM(mail)
+	customer := model.QueryCustomer(mail)
 	if len(customer) == 0 {
 		response := gin.H{
 			"status":  "error",
@@ -137,20 +117,20 @@ func PatchUser(c *gin.Context) {
 }
 
 func DeleteUser(c *gin.Context) {
-	rut := c.Param("rut")
+	mail := c.Param("mail")
 	var user model.Customer
-	customer := model.QueryCustomer(rut)
+	customer := model.QueryCustomer(mail)
 
 	if len(customer) == 0 {
 		response := gin.H{
 			"status":  "error",
 			"data":    nil,
-			"message": "There is no user with that rut",
+			"message": "There is no user with that mail",
 		}
 		c.JSON(http.StatusNotFound, response)
 	} else {
 		c.BindJSON(&user)
-		status := model.EraseCustomer(rut)
+		status := model.EraseCustomer(mail)
 		if status {
 			response := gin.H{
 				"status":  "success",

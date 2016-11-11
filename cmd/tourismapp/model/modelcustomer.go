@@ -33,35 +33,7 @@ func QueryCustomers() []Customer {
 	return customers
 }
 
-func QueryCustomer(rut string) []Customer {
-	connectDatabase()
-	pingDatabase()
-	customer := make([]Customer, 0)
-	cus := Customer{}
-	stmt, errp := db.Prepare("SELECT * FROM customer WHERE rut=$1 AND status=true")
-	if errp != nil {
-		log.Println("Error preparing query", errp)
-		return customer
-	}
-	defer stmt.Close()
-	errq := stmt.QueryRow(rut).Scan(
-		&cus.Name,
-		&cus.Surname,
-		&cus.S_surname,
-		&cus.Rut,
-		&cus.Mail,
-		&cus.Password,
-		&cus.Status)
-	disconnectDatabase()
-	if errq != nil {
-		log.Println("Error in query ", errq)
-		return customer
-	}
-	customer = append(customer, cus)
-	return customer
-}
-
-func QueryCustomerM(mail string) []Customer {
+func QueryCustomer(mail string) []Customer {
 	connectDatabase()
 	pingDatabase()
 	customer := make([]Customer, 0)

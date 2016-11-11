@@ -41,8 +41,7 @@ func main() {
 	v1 := r.Group("api/v1")
 	{
 		v1.GET("/customers", routes.GetUsers)
-		v1.GET("/customers/:rut", routes.GetUser)
-		v1.GET("/customer/:mail", routes.GetUserM)
+		v1.GET("/customers/:mail", routes.GetUser)
 		v1.GET("/evaluations", routes.GetEvaluations)
 		v1.GET("/evaluations/:id", routes.GetEvaluation)
 		v1.GET("/geocoords", routes.GetGeocoords)
