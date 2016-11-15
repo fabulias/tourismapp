@@ -63,7 +63,7 @@ func main() {
 		v1.POST("/tags", routes.PostTag)
 		v1.POST("/tags_places", routes.PostTagPlace)
 
-		v1.PATCH("/customers/:rut", routes.PatchUser)
+		v1.PATCH("/customers/:mail", routes.PatchUser)
 		v1.PATCH("/evaluations/:id", routes.PatchEvaluation)
 		v1.PATCH("/geocoords/:id", routes.PatchGeocoord)
 		v1.PATCH("/places/:id", routes.PatchPlace)
