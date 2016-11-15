@@ -97,6 +97,7 @@ func PatchUser(c *gin.Context) {
 		c.JSON(http.StatusNotFound, response)
 	} else {
 		c.BindJSON(&user)
+		user.Mail = mail
 		status := model.UpdateCustomer(user)
 		if status {
 			response := gin.H{
