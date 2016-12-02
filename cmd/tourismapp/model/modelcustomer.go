@@ -87,15 +87,13 @@ func InsertCustomer(user Customer) bool {
 func UpdateCustomer(customer Customer) bool {
 	connectDatabase()
 	pingDatabase()
-	query, _ := db.Prepare("update customer set name=$1, surname=$2, s_surname=$3, mail=$4, pass=$5, status=$6 where rut=$7")
+	query, _ := db.Prepare("update customer set name=$1, surname=$2, s_surname=$3, pass=$4 where status=true and mail=$5")
 	_, errq := query.Exec(
 		customer.Name,
 		customer.Surname,
 		customer.S_surname,
-		customer.Mail,
 		customer.Password,
-		customer.Status,
-		customer.Rut)
+		customer.Mail)
 	disconnectDatabase()
 	if errq != nil {
 		return false

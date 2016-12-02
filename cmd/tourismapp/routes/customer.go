@@ -84,19 +84,20 @@ func PostUser(c *gin.Context) {
 }
 
 func PatchUser(c *gin.Context) {
-	rut := c.Param("rut")
+	mail := c.Param("mail")
 	var user model.Customer
-	customer := model.QueryCustomer(rut)
+	customer := model.QueryCustomer(mail)
 
 	if len(customer) == 0 {
 		response := gin.H{
 			"status":  "error",
 			"data":    nil,
-			"message": "There is no user with that rut",
+			"message": "There is no user with that mail",
 		}
 		c.JSON(http.StatusNotFound, response)
 	} else {
 		c.BindJSON(&user)
+		user.Mail = mail
 		status := model.UpdateCustomer(user)
 		if status {
 			response := gin.H{
