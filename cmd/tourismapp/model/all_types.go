@@ -26,7 +26,7 @@ type Place struct {
 	Date_c      time.Time `json:"date"`
 	Description string    `json:"description"`
 	Phone       int64     `json:"phone"`
-	Status      bool      `json:"phone"`
+	Status      bool      `json:"status"`
 }
 
 // Clase que almacenara los datos obtenidos de cada tag.
