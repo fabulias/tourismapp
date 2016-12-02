@@ -91,16 +91,14 @@ func get_id() int64 {
 func InsertPlace(place Place) bool {
 	connectDatabase()
 	pingDatabase()
-	query, _ := db.Prepare("INSERT INTO place VALUES ($1,$2,$3,$4,$5,$6)")
-	log.Println("Aqui**************")
-	log.Println(place)
-	log.Println("Aqui**************")
+	query, _ := db.Prepare("INSERT INTO place (name, score, id_user, date_inscription, description, phone, status)VALUES ($1,$2,$3,$4,$5,$6,$7)")
 	_, errq := query.Exec(
 		place.Name,
 		place.Score,
 		place.User_c,
 		place.Date_c,
 		place.Description,
+		place.Phone,
 		true)
 	disconnectDatabase()
 
