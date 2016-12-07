@@ -85,10 +85,12 @@ func PostPlace(c *gin.Context) {
 	}
 
 	status := model.InsertPlace(place)
+	id_place := model.IdPlace(place)
+	id := gin.H{"id_place": id_place}
 	if status {
 		response := gin.H{
 			"status":  "success",
-			"data":    nil,
+			"data":    id,
 			"message": "Success insert",
 		}
 		c.JSON(http.StatusOK, response)

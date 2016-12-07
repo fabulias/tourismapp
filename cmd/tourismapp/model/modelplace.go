@@ -110,6 +110,19 @@ func InsertPlace(place Place) bool {
 		return true
 	}
 }
+func IdPlace(place Place) int {
+	connectDatabase()
+	pingDatabase()
+	var id_place int
+	query, _ := db.Prepare("SELECT id FROM place WHERE name=$1")
+	defer query.Close()
+	errq := query.QueryRow(place.Name).Scan(&id_place)
+	if errq != nil {
+		log.Println(errq)
+	}
+	disconnectDatabase()
+	return id_place
+}
 
 func UpdatePlace(place Place) bool {
 	connectDatabase()
