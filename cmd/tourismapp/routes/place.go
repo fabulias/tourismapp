@@ -10,10 +10,6 @@ import (
 )
 
 func checkFields(Pl model.Place) bool {
-	if !Pl.Status {
-		return false
-	}
-
 	if strings.Compare(Pl.Name, "") == 0 {
 		return false
 	}
