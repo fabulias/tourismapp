@@ -62,7 +62,7 @@ func PostSchedule(c *gin.Context) {
 	var schedule model.Schedule
 
 	//JSON enviado es enlazado a Variable del tipo Schedule
-	err := c.Bind(&schedule)
+	err := c.BindJSON(&schedule)
 	if err != nil {
 		if !checkFields(schedule) {
 			response := gin.H{
