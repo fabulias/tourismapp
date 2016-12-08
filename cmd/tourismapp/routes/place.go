@@ -16,9 +16,6 @@ func checkFields(Pl model.Place) bool {
 	if strings.Compare(Pl.User_c, "") == 0 {
 		return false
 	}
-	if Pl.Phone == 0 {
-		return false
-	}
 	return true
 }
 
