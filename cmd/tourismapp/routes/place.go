@@ -96,7 +96,7 @@ func PostPlace(c *gin.Context) {
 		c.JSON(http.StatusOK, response)
 	} else {
 		response := gin.H{
-			"status":  "success",
+			"status":  "error",
 			"data":    nil,
 			"message": "place already exist",
 		}

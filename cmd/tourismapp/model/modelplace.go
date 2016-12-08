@@ -63,31 +63,6 @@ func QueryPlace(id string) []Place {
 	return place
 }
 
-//Inserta un nuevo Place en la base de datos, retorna true o false dependiendo
-//del exito de la operación
-func get_id() int64 {
-	connectDatabase()
-	pingDatabase()
-	var id_last int64
-	row, errq := db.Query("SELECT count(*) FROM place")
-	if errq != nil {
-		log.Println(errq)
-	}
-	defer row.Close()
-	for row.Next() {
-
-		err := row.Scan(&id_last)
-		if err != nil {
-			log.Println(err)
-			log.Println(row)
-			log.Println("HOLA")
-		}
-	}
-	id_last++
-	disconnectDatabase()
-	return id_last
-
-}
 func InsertPlace(place Place) bool {
 	connectDatabase()
 	pingDatabase()
