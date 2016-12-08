@@ -10,6 +10,13 @@ import (
 	"tourismapp/cmd/tourismapp/model"
 )
 
+func checkFields(sc model.Schedule) bool {
+	if sc.Id != 0 {
+		return false
+	}
+	return true
+}
+
 //Método que busca todos los horarios de la bdd.
 func GetSchedules(c *gin.Context) {
 	schedules := model.QuerySchedules()
@@ -57,15 +64,15 @@ func PostSchedule(c *gin.Context) {
 	//JSON enviado es enlazado a Variable del tipo Schedule
 	err := c.Bind(&schedule)
 	if err != nil {
-		log.Fatalln(err)
-		response := gin.H{
-			"status":  "error",
-			"data":    nil,
-			"message": "Missing some field required",
+		if !checkFields(schedule) {
+			response := gin.H{
+				"status":  "error",
+				"data":    nil,
+				"message": "Missing some field required",
+			}
+			c.JSON(http.StatusBadRequest, response)
 		}
-		c.JSON(http.StatusBadRequest, response)
 	} else {
-		fmt.Printf("Entre al else, voy a continuar con InsertSchedule")
 		status := model.InsertSchedule(schedule)
 		if status {
 			response := gin.H{
