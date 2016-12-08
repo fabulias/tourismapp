@@ -1,16 +1,14 @@
 package routes
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
-	"log"
 	"net/http"
 	//"time"
 	"tourismapp/cmd/tourismapp/model"
 )
 
-func checkFields(sc model.Schedule) bool {
+func checkFieldSc(sc model.Schedule) bool {
 	if sc.Id != 0 {
 		return false
 	}
@@ -64,7 +62,7 @@ func PostSchedule(c *gin.Context) {
 	//JSON enviado es enlazado a Variable del tipo Schedule
 	err := c.BindJSON(&schedule)
 	if err != nil {
-		if !checkFields(schedule) {
+		if !checkFieldSc(schedule) {
 			response := gin.H{
 				"status":  "error",
 				"data":    nil,
