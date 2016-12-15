@@ -29,20 +29,21 @@ func GetGeocoords(c *gin.Context) {
 }
 
 func GetGeocoordRadio(c *gin.Context) {
-	id := c.Param("id")
+	lat := c.Param("lat")
+	lng := c.Param("lng")
 	radio := c.Param("radio")
-	place := model.QueryGeocoordRadio(id, radio)
-	if len(place) == 0 {
+	geo := model.QueryGeocoordRadio(lat, lng, radio)
+	if len(geo) == 0 {
 		response := gin.H{
 			"status":  "error",
 			"data":    nil,
-			"message": "There is no place with that id",
+			"message": "There is no geocoord in this area",
 		}
 		c.JSON(http.StatusNotFound, response)
 	} else {
 		response := gin.H{
 			"status":  "success",
-			"data":    place,
+			"data":    geo,
 			"message": nil,
 		}
 		c.JSON(http.StatusOK, response)
