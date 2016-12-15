@@ -62,8 +62,7 @@ func InsertTagPlace(tagplace Tagplace) bool {
 	query, _ := db.Prepare("INSERT INTO tags_places VALUES ($1, $2)")
 	_, errq := query.Exec(
 		tagplace.Id_place,
-		tagplace.Id_tags
-		)
+		tagplace.Id_tags)
 	disconnectDatabase()
 	if errq != nil {
 		return false
