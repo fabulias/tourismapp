@@ -38,7 +38,7 @@ func main() {
 
 	r.Use(Cors())
 
-	v1 := r.Group("api")
+	v1 := r.Group("api/v1")
 	{
 		v1.GET("/customers", routes.GetUsers)
 		v1.GET("/customers/:mail", routes.GetUser)
