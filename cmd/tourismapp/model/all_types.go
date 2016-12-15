@@ -37,8 +37,8 @@ type Tag struct {
 
 // Clase para almacenar tags de cada lugar
 type Tagplace struct {
-	Id_tags  int64 `json:"id_tag"`
-	Id_place int64 `json:"id_place"`
+	Id_tags  string `json:"id_tag"`
+	Id_place int64  `json:"id_place"`
 }
 
 //Horarios, 7 días de la semana, open-Close por cada día

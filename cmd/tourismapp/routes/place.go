@@ -71,6 +71,7 @@ func PostPlace(c *gin.Context) {
 				"message": "Missing some field required",
 			}
 			c.JSON(http.StatusBadRequest, response)
+			return
 		}
 	}
 

@@ -46,6 +46,7 @@ func main() {
 		v1.GET("/evaluations/:id", routes.GetEvaluation)
 		v1.GET("/geocoords", routes.GetGeocoords)
 		v1.GET("/geocoords/:id", routes.GetGeocoord)
+		v1.GET("/geocoords/:id/:radio", routes.GetGeocoordRadio)
 		v1.GET("/places", routes.GetPlaces)
 		v1.GET("/places/:id", routes.GetPlace)
 		v1.GET("/schedules", routes.GetSchedules)

@@ -28,6 +28,27 @@ func GetGeocoords(c *gin.Context) {
 	}
 }
 
+func GetGeocoordRadio(c *gin.Context) {
+	id := c.Param("id")
+	radio := c.Param("radio")
+	place := model.QueryGeocoordRadio(id, radio)
+	if len(place) == 0 {
+		response := gin.H{
+			"status":  "error",
+			"data":    nil,
+			"message": "There is no place with that id",
+		}
+		c.JSON(http.StatusNotFound, response)
+	} else {
+		response := gin.H{
+			"status":  "success",
+			"data":    place,
+			"message": nil,
+		}
+		c.JSON(http.StatusOK, response)
+	}
+}
+
 //Método que busca los datos de un usuario por su id.
 func GetGeocoord(c *gin.Context) {
 	id := c.Param("id")
