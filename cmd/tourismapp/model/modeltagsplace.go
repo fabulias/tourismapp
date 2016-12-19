@@ -42,7 +42,7 @@ func QueryTagsPlace(idp, idt string) []Tagplace {
 		return tagplace
 	}
 	defer stmt.Close()
-	id_t, _ := idt
+	id_t := idt
 	id_p, _ := strconv.ParseInt(idp, 10, 8)
 	errq := stmt.QueryRow(id_t, id_p).Scan(
 		&t.Id_place,
