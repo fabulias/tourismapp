@@ -20,8 +20,8 @@ func QueryTagsPlaces() []Tagplace {
 	tmp := Tagplace{}
 	for rows.Next() {
 		err := rows.Scan(
-			&tmp.Id_tags,
-			&tmp.Id_place)
+			&tmp.Id_place,
+			&tmp.Id_tags)
 		if err != nil {
 			log.Println(err)
 		}
@@ -37,13 +37,14 @@ func QueryTagsPlace(idp, idt string) []Tagplace {
 	tagplace := make([]Tagplace, 0)
 	t := Tagplace{}
 	stmt, errp := db.Prepare("SELECT * FROM tags_places WHERE id_tag=$1 AND id_place=$2")
+	log.Println("")
 	if errp != nil {
 		log.Println("Error preparing query", errp)
 		return tagplace
 	}
 	defer stmt.Close()
 	id_t := idt
-	id_p, _ := strconv.ParseInt(idp, 10, 8)
+	id_p, _ := strconv.ParseInt(idp, 10, 10)
 	errq := stmt.QueryRow(id_t, id_p).Scan(
 		&t.Id_place,
 		&t.Id_tags)
@@ -53,6 +54,7 @@ func QueryTagsPlace(idp, idt string) []Tagplace {
 		return tagplace
 	}
 	tagplace = append(tagplace, t)
+	log.Println(tagplace)
 	return tagplace
 }
 
