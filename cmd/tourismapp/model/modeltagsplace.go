@@ -45,8 +45,8 @@ func QueryTagsPlace(idp, idt string) []Tagplace {
 	id_t, _ := strconv.ParseInt(idt, 10, 8)
 	id_p, _ := strconv.ParseInt(idp, 10, 8)
 	errq := stmt.QueryRow(id_t, id_p).Scan(
-		&t.Id_tags,
-		&t.Id_place)
+		&t.Id_place,
+		&t.Id_tags)
 	disconnectDatabase()
 	if errq != nil {
 		log.Println("Error in query ", errq)
